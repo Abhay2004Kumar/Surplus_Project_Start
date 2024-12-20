@@ -6,8 +6,9 @@ const app=express()
 
 //config cors
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
+    origin: "http://localhost:3000", // Allow requests from the frontend
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    credentials: true, // Allow cookies to be sent
 }))
 
 app.use(express.json({limit: "16kb"}))

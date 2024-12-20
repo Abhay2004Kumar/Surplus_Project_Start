@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:5000/api/v1/users/loginUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include", // Include cookies for authentication
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Redirect to Home Page on successful login
+        navigate("/");
+      } else {
+        // Display error message
+        setError(data.message || "Login failed. Please try again.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again later.");
+    }
+  };
 
   return (
     <>
@@ -19,8 +49,13 @@ const LoginPage = () => {
             <span className="underline decoration-blue-500">WEBSITE 👋</span>
           </h2>
 
+          {/* Error Message */}
+          {error && (
+            <div className="text-center text-red-500 text-sm mb-4">{error}</div>
+          )}
+
           {/* Form */}
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Email */}
             <div>
               <label
@@ -34,6 +69,9 @@ const LoginPage = () => {
                 id="email"
                 placeholder="Enter your email"
                 className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
 
@@ -50,6 +88,9 @@ const LoginPage = () => {
                 id="password"
                 placeholder="Enter your password"
                 className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
 

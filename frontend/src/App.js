@@ -4,10 +4,13 @@ import Layout from "./Components/Layout";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import HomePage from "./pages/HomePage";
+import Donation from "./pages/Donation"
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <Router>
+         <Toaster position="top-center" reverseOrder={false} />
       <Routes>
         {/* Home Page */}
         <Route
@@ -38,6 +41,16 @@ function App() {
             </Layout>
           }
         />
+
+          <Route
+          path="/donation"
+          element={
+            <Layout>
+              <Donation/>
+            </Layout>
+          }
+        />
+        
       </Routes>
     </Router>
   );

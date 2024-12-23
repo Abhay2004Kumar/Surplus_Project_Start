@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
+import axios from "axios";
+import toast from "react-hot-toast"
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -12,23 +14,19 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/v1/users/loginUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: "include", // Include cookies for authentication
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Redirect to Home Page on successful login
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/users/loginUser",
+        { email, password },
+        { withCredentials: true }
+      );
+  
+      const { accessToken } = response.data.data; // Ensure you're accessing the correct structure
+      if (accessToken) {
+        localStorage.setItem("accessToken", accessToken); // Save token in localStorage
+        toast.success("Login successful!");
         navigate("/");
       } else {
-        // Display error message
-        setError(data.message || "Login failed. Please try again.");
+        toast.error("Login failed: No token received.");
       }
     } catch (err) {
       setError("An error occurred. Please try again later.");

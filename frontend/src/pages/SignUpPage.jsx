@@ -12,6 +12,7 @@ const SignUpPage = () => {
     email: "",
     contact: "",
     password: "",
+    confirmPassword: "", // Added confirmPassword field
   });
 
   // State for error messages
@@ -26,8 +27,12 @@ const SignUpPage = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/users/registerUser", formData); // Adjust API endpoint if needed
+      const response = await axios.post("http://localhost:5000/api/v1/users/registerUser", formData);
       if (response.status === 201) {
         navigate("/"); // Redirect to Home Page
       }
@@ -116,6 +121,20 @@ const SignUpPage = () => {
             />
           </div>
 
+          {/* Confirm Password */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
           {/* Error Message */}
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
@@ -134,7 +153,7 @@ const SignUpPage = () => {
         <div className="text-center text-sm mt-4 text-gray-500">
           Already have an account?{" "}
           <span
-            onClick={() => navigate("/login")} // Navigate to Login Page
+            onClick={() => navigate("/login")}
             className="text-blue-500 underline cursor-pointer"
           >
             Login

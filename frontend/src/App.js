@@ -43,7 +43,7 @@ function App() {
         />
 
           <Route
-          path="/donation"
+          path="/donate"
           element={
             <Layout>
               <Donation/>

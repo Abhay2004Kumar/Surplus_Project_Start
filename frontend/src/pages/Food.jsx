@@ -1,59 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Food = () => {
-  const [food, setFood] = useState([
-    {
-      id: 1,
-      food: "Pizza",
-      quantity: 2,
-      image: "https://via.placeholder.com/250?text=Pizza",
-      expiry: "2024-12-25",
-      location: "New York",
-      contact: "1234567890",
-    },
-    {
-      id: 2,
-      food: "Sandwich",
-      quantity: 5,
-      image: "https://via.placeholder.com/250?text=Sandwich",
-      expiry: "2024-12-26",
-      location: "New York",
-      contact: "9876543210",
-    },
-    {
-      id: 3,
-      food: "Burger",
-      quantity: 3,
-      image: "https://via.placeholder.com/250?text=Burger",
-      expiry: "2024-12-27",
-      location: "Los Angeles",
-      contact: "5555555555",
-    },
-  ]);
+  const [food, setFood] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleFullRequest = (id) => {
-    alert(`You have requested the full quantity of food ID: ${id}`);
-    setFood((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: 0 } : item
-      )
-    );
-  };
+  // Fetch JWT token from localStorage or cookies (if it's saved there)
+  const token = localStorage.getItem("accessToken") || document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
 
-  const handlePartialRequest = (id) => {
-    const requestedQuantity = prompt(
-      "Enter the quantity you want (less than available):"
-    );
-    const quantity = parseInt(requestedQuantity, 10);
+  // Fetch donations from the backend API
+  useEffect(() => {
+    const fetchDonations = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/v1/users/get-all-donations", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token in the Authorization header
+          },
+        });
+        setFood(response.data.data); // Assuming the donations are in 'data' field
+      } catch (error) {
+        console.error("Error fetching donations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setFood((prev) =>
-      prev.map((item) =>
-        item.id === id && quantity > 0 && quantity < item.quantity
-          ? { ...item, quantity: item.quantity - quantity }
-          : item
-      )
-    );
-  };
+    if (token) {
+      fetchDonations();
+    } else {
+      console.error("No token found, user is not authenticated.");
+      setLoading(false);
+    }
+  }, [token]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -61,32 +43,31 @@ const Food = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {food.map((donation) => (
           <div
-            key={donation.id}
+            key={donation._id}
             className={`bg-white p-4 rounded shadow-lg ${
               donation.quantity === 0 ? "opacity-50" : ""
             }`}
           >
             <img
-              src={donation.image}
+              src={donation.foodImage}
               alt={donation.food}
               className="w-full h-[200px] object-cover rounded mb-4"
             />
             <h2 className="text-xl font-bold">{donation.food}</h2>
             <p className="text-gray-700">Quantity: {donation.quantity}</p>
-            <p className="text-gray-700">Expiry: {donation.expiry}</p>
+            <p className="text-gray-700">Expiry: {donation.expiryDate}</p>
             <p className="text-gray-700">Location: {donation.location}</p>
+            <p className="text-gray-700">Postal Code: {donation.postal}</p> {/* Added postal code */}
             <p className="text-gray-700">Contact: {donation.contact}</p>
             {donation.quantity > 0 ? (
               <div className="mt-4 space-x-4">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                  onClick={() => handleFullRequest(donation.id)}
                 >
                   Request Full
                 </button>
                 <button
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                  onClick={() => handlePartialRequest(donation.id)}
                 >
                   Request Partial
                 </button>

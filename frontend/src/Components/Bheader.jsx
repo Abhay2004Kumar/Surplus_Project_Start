@@ -22,12 +22,22 @@ const Bheader = () => {
         <div className="flex gap-4 justify-center">
           {/* Conditionally render the Donate Now button */}
           {isLoggedIn && (
-            <button
-              onClick={() => navigate("/donate")}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-md"
-            >
-              Donate Now
-            </button>
+           <div className="flex space-x-4">
+           <button
+             onClick={() => navigate("/donate")}
+             className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md"
+           >
+             Donate Now
+           </button>
+           <button
+             onClick={() => navigate("/need")}
+             className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-md"
+           >
+             Need Food
+           </button>
+         </div>
+         
+            
           )}
 
           {/* Login Button (conditionally rendered) */}

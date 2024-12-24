@@ -6,6 +6,7 @@ import SignUpPage from "./pages/SignUpPage";
 import HomePage from "./pages/HomePage";
 import Donation from "./pages/Donation"
 import { Toaster } from "react-hot-toast";
+import Food from "./pages/Food"
 
 function App() {
   return (
@@ -47,6 +48,14 @@ function App() {
           element={
             <Layout>
               <Donation/>
+            </Layout>
+          }
+        />
+           <Route
+          path="/need"
+          element={
+            <Layout>
+              <Food/>
             </Layout>
           }
         />

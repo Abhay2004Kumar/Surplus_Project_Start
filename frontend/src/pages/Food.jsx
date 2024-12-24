@@ -8,6 +8,15 @@ const Food = () => {
   // Fetch JWT token from localStorage or cookies (if it's saved there)
   const token = localStorage.getItem("accessToken") || document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
 
+  // Function to format date to dd/mm/yyyy
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   // Fetch donations from the backend API
   useEffect(() => {
     const fetchDonations = async () => {
@@ -55,7 +64,7 @@ const Food = () => {
             />
             <h2 className="text-xl font-bold">{donation.food}</h2>
             <p className="text-gray-700">Quantity: {donation.quantity}</p>
-            <p className="text-gray-700">Expiry: {donation.expiryDate}</p>
+            <p className="text-gray-700">Expiry: {formatDate(donation.expiryDate)}</p> {/* Formatted expiry date */}
             <p className="text-gray-700">Location: {donation.location}</p>
             <p className="text-gray-700">Postal Code: {donation.postal}</p> {/* Added postal code */}
             <p className="text-gray-700">Contact: {donation.contact}</p>

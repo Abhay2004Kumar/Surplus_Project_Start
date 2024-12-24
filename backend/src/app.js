@@ -1,6 +1,10 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"  //used for applying CRUD operation on cookies
+import axios from "axios"
+import dotenv from "dotenv"
+
+dotenv.config();
 
 const app=express()
 
@@ -22,6 +26,18 @@ import Userrouter from "./routes/user.routes.js"
 
 //routes declare
 app.use("/api/v1/users",Userrouter)
+
+
+app.get("/api/v1/location", async (req, res) => {
+    try {
+        const token = process.env.IP_TOKEN; // Your IPInfo API token
+        const response = await axios.get(`https://ipinfo.io/json?token=${token}`);
+        res.json(response.data); // Send the API response back to the frontend
+    } catch (error) {
+        console.error("Error fetching location:", error.message);
+        res.status(500).json({ error: "Unable to fetch location" });
+    }
+});
 
 
 

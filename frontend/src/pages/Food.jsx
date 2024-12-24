@@ -4,6 +4,8 @@ import axios from "axios";
 const Food = () => {
   const [food, setFood] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [postal, setPostalCode] = useState(""); // State for postal code input
+  const [searchResult, setSearchResult] = useState([]); // State for filtered donations
 
   // Fetch JWT token from localStorage or cookies (if it's saved there)
   const token = localStorage.getItem("accessToken") || document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
@@ -27,6 +29,7 @@ const Food = () => {
           },
         });
         setFood(response.data.data); // Assuming the donations are in 'data' field
+        setSearchResult(response.data.data); // Set the initial search result as all donations
       } catch (error) {
         console.error("Error fetching donations:", error);
       } finally {
@@ -42,6 +45,30 @@ const Food = () => {
     }
   }, [token]);
 
+  // Function to handle searching by postal code
+  const handleSearch = async () => {
+    if (!postal) {
+      setSearchResult(food); // If no postal code is entered, show all donations
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/users/get-donation-by-postal",
+        { postal: postal },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token in the Authorization header
+          },
+        }
+      );
+      setSearchResult(response.data.data); // Set the search results based on postal code
+    } catch (error) {
+      console.error("Error searching donations by postal code:", error);
+      setSearchResult([]); // If there's an error, show no results
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -49,8 +76,27 @@ const Food = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-3xl font-bold text-center mb-6">Available Food</h1>
+
+      {/* Search Section */}
+      <div className="flex justify-center mb-6">
+        <input
+          type="text"
+          placeholder="Enter postal code"
+          value={postal}
+          onChange={(e) => setPostalCode(e.target.value)}
+          className="px-4 py-2 border rounded-l-md"
+        />
+        <button
+          onClick={handleSearch}
+          className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600"
+        >
+          Search
+        </button>
+      </div>
+
+      {/* Displaying Food Donations */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {food.map((donation) => (
+        {searchResult.map((donation) => (
           <div
             key={donation._id}
             className={`bg-white p-4 rounded shadow-lg ${

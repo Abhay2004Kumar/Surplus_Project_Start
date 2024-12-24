@@ -189,7 +189,24 @@ export const createDonation = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(200, newDonation, "Donation created successfully"));
   });
   
-
+  export const getAllDonations = asyncHandler(async (req, res) => {
+    try {
+      // Fetch all donations from the database
+      const donations = await Donation.find()
+        .populate("user", "firstName lastName email") // Populate user details if needed
+        .sort({ createdAt: -1 }); // Sort donations by creation date (optional)
+  
+      if (!donations || donations.length === 0) {
+        return res.status(404).json(new ApiResponse(404, [], "No donations found"));
+      }
+  
+      // Return the donations
+      res.status(200).json(new ApiResponse(200, donations, "Donations retrieved successfully"));
+    } catch (error) {
+      console.error("Error fetching donations:", error);
+      res.status(500).json(new ApiResponse(500, null, "Error retrieving donations"));
+    }
+  });
 
 
 

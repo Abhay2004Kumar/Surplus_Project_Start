@@ -208,6 +208,33 @@ export const createDonation = asyncHandler(async (req, res) => {
     }
   });
 
+    export const getDonationsByPostalCode = asyncHandler(async (req, res) => {
+        try {
+        const { postal } = req.body; // Get postal code from the request body
+    
+        if (!postal) {
+            return res.status(400).json(new ApiResponse(400, null, "Postal code is required"));
+        }
+    
+        // Fetch donations with the specified postal code
+        const donations = await Donation.find({ postal })
+            .populate("user", "firstName lastName email") // Populate user details if needed
+            .sort({ createdAt: -1 }); // Sort donations by creation date (optional)
+    
+        if (!donations || donations.length === 0) {
+            return res.status(404).json(new ApiResponse(404, [], "No donations found for this postal code"));
+        }
+    
+        // Return the donations
+        res.status(200).json(new ApiResponse(200, donations, "Donations retrieved successfully"));
+        } catch (error) {
+        console.error("Error fetching donations by postal code:", error);
+        res.status(500).json(new ApiResponse(500, null, "Error retrieving donations by postal code"));
+        }
+    });
+  
+  
+
 
 
  export {registerUser, loginUser, logOutUser}

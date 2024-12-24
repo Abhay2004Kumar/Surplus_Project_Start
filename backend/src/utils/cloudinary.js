@@ -1,4 +1,6 @@
 import { v2 as cloudinary} from "cloudinary";
+import dotenv from "dotenv"
+dotenv.config()
 
 import fs from "fs"
 
@@ -10,23 +12,24 @@ import fs from "fs"
 });
 
 const uploadCloudinary = async (localFilePath) => {
-    try {
-        if(!localFilePath) return null
-        //upload the file on cloudinary
-       const response = await cloudinary.uploader.upload(localFilePath, {
-            resource_type: "auto"
-        })
-        // file has been uploaded successfully
-        // console.log("filr iis uploaded ",  response.url);
-        fs.unlinkSync(localFilePath)
+  try {
+      if (!localFilePath) return null;
+      console.log('Uploading file to Cloudinary:', localFilePath);
       
-        return response
-        
-    } catch (error) {
-        fs.unlinkSync(localFilePath) // remove the locally saved temmporary file as the failed upload operation
-        return null
-    }
-}
+      const response = await cloudinary.uploader.upload(localFilePath, {
+          resource_type: "auto"
+      });
+
+      console.log('Cloudinary upload response:', response);
+
+      fs.unlinkSync(localFilePath); // Remove the local file after upload
+      return response;
+  } catch (error) {
+      console.error('Error uploading file to Cloudinary:', error);
+      fs.unlinkSync(localFilePath); // Remove the local file on error
+      return null;
+  }
+};
 
 const deleteFromCloudinary = async (publicId, resourceType = 'image') => {
     try {

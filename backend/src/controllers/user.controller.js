@@ -5,6 +5,7 @@ import { deleteFromCloudinary, uploadCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose";
+import { Donation } from "../models/donation.models.js";
 
 const generateAccessAndRefreshTokens = async(userId) => {
     try {
@@ -158,6 +159,36 @@ const logOutUser = asyncHandler(async (req,res) => {
         .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
+export const createDonation = asyncHandler(async (req, res) => {
+    const { food, quantity, expiryDate,postal,location, contact } = req.body;
+  
+    // Validation
+    if ([food, quantity, expiryDate, ,postal,location, contact].some((field) => field?.trim() === "")) {
+      throw new ApiError(400, "All fields are required.");
+    }
+  
+    // Upload food image to Cloudinary
+    const uploadedImage = await uploadCloudinary(req.file.path);
+   
+    if (!uploadedImage) {
+      throw new ApiError(500, "Error uploading image.");
+    }
+  
+    const newDonation = new Donation({
+      food,
+      quantity,
+      foodImage: uploadedImage.url,
+      expiryDate,
+      location,
+      contact,
+      postal,
+      user: req.user._id, // Associate donation with authenticated user
+    });
+  
+    await newDonation.save();
+    res.status(201).json(new ApiResponse(200, newDonation, "Donation created successfully"));
+  });
+  
 
 
 

@@ -1,7 +1,27 @@
-import React from "react";
-import foodpic from "../assets/foody.jpg"
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import foodpic from "../assets/foody.jpg";
 
 const Donation = () => {
+  const [location, setLocation] = useState("Fetching location...");
+
+  // Fetch location using IP-based geolocation service
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/v1/location");
+        console.log("Location Data:", response.data); // Log location data
+        // Set the location data to state
+        setLocation(response.data.city +` ${response.data.postal}`  || "Location not available");
+      } catch (error) {
+        console.error("Error fetching location:", error);
+        setLocation("Unable to fetch location");
+      }
+    };
+
+    fetchLocation();
+  }, []); // Empty dependency array ensures this runs only once on component mount
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded shadow-lg max-w-lg w-full">
@@ -57,7 +77,8 @@ const Donation = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
             <input
               type="text"
-              placeholder="Connected through Google Maps"
+              value={location}
+              readOnly
               className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
             />
           </div>

@@ -29,6 +29,10 @@ function Header() {
     navigate("/");
   };
 
+  const handleContactClick = () => {
+    navigate("/contact");
+  };
+
   // Check if the user is logged in by checking localStorage on initial render
   useEffect(() => {
     const acToken = localStorage.getItem("accessToken");
@@ -45,7 +49,9 @@ function Header() {
       <ul className="flex space-x-6 text-white">
         <li className="hover:text-yellow-400 cursor-pointer">About</li>
         <li className="hover:text-yellow-400 cursor-pointer">Testimonials</li>
-        <li className="hover:text-yellow-400 cursor-pointer">Contact</li>
+        <li 
+        onClick={handleContactClick}
+        className="hover:text-yellow-400 cursor-pointer">Contact</li>
 
         {isLoggedIn && (
           // Show Logout button only if the user is logged in

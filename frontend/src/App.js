@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage";
 import Donation from "./pages/Donation"
 import { Toaster } from "react-hot-toast";
 import Food from "./pages/Food"
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -56,6 +57,14 @@ function App() {
           element={
             <Layout>
               <Food/>
+            </Layout>
+          }
+        />
+         <Route
+          path="/contact"
+          element={
+            <Layout>
+              <Contact/>
             </Layout>
           }
         />

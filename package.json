@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@formspree/react": "^2.5.1",
     "@react-google-maps/api": "^2.20.3"
   }
 }

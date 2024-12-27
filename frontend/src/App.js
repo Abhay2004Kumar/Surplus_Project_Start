@@ -8,6 +8,7 @@ import Donation from "./pages/Donation"
 import { Toaster } from "react-hot-toast";
 import Food from "./pages/Food"
 import Contact from "./pages/Contact";
+import DeveloperPage from "./pages/DeveloperPage";
 
 function App() {
   return (
@@ -65,6 +66,15 @@ function App() {
           element={
             <Layout>
               <Contact/>
+            </Layout>
+          }
+        />
+
+          <Route
+          path="/about"
+          element={
+            <Layout>
+              <DeveloperPage/>
             </Layout>
           }
         />

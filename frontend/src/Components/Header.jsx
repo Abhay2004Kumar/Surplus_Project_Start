@@ -33,6 +33,12 @@ function Header() {
     navigate("/contact");
   };
 
+  const handleAboutClick = () => {
+    navigate("/about")
+  }
+  const handlehomeClick = () => {
+    navigate("/")
+  }
   // Check if the user is logged in by checking localStorage on initial render
   useEffect(() => {
     const acToken = localStorage.getItem("accessToken");
@@ -47,8 +53,13 @@ function Header() {
     <header className="absolute top-0 left-0 w-full flex justify-between items-center p-6 bg-black bg-opacity-50">
       <div className="text-2xl font-bold text-white">YourLogo</div>
       <ul className="flex space-x-6 text-white">
-        <li className="hover:text-yellow-400 cursor-pointer">About</li>
-        <li className="hover:text-yellow-400 cursor-pointer">Testimonials</li>
+      <li 
+        onClick={handlehomeClick}
+        className="hover:text-yellow-400 cursor-pointer">Home</li>
+        <li 
+        onClick={handleAboutClick}
+        className="hover:text-yellow-400 cursor-pointer">About</li>
+       
         <li 
         onClick={handleContactClick}
         className="hover:text-yellow-400 cursor-pointer">Contact</li>

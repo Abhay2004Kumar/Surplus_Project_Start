@@ -25,6 +25,7 @@ const LoginPage = () => {
         localStorage.setItem("accessToken", accessToken); // Save token in localStorage
         toast.success("Login successful!");
         navigate("/");
+        window.location.reload()
       } else {
         toast.error("Login failed: No token received.");
       }

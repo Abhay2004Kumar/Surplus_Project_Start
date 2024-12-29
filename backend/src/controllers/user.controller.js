@@ -232,6 +232,41 @@ export const createDonation = asyncHandler(async (req, res) => {
         res.status(500).json(new ApiResponse(500, null, "Error retrieving donations by postal code"));
         }
     });
+
+    export const requestFullDonation = async (req, res) => {
+      try {
+        const { id } = req.params;
+        const donation = await Donation.findByIdAndUpdate(id, { quantity: 0 }, { new: true });
+        if (!donation) {
+          return res.status(404).json({ error: "Donation not found" });
+        }
+        res.status(200).json({ success: true, data: donation });
+      } catch (error) {
+        res.status(500).json({ error: "Server error" });
+      }
+    };
+    
+  
+    export const requestPartialDonation = async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { quantity } = req.body;
+        const donation = await Donation.findById(id);
+    
+        if (!donation || donation.quantity < quantity) {
+          return res.status(400).json({ error: "Invalid request" });
+        }
+    
+        donation.quantity -= quantity;
+        await donation.save();
+    
+        res.status(200).json({ success: true, data: donation });
+      } catch (error) {
+        res.status(500).json({ error: "Server error" });
+      }
+    };
+    
+      
   
   
 

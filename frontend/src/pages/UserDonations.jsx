@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";  // Import the useNavigate hook
 
 const UserDonations = () => {
   const [donations, setDonations] = useState([]);
   const [requests, setRequests] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();  // Initialize useNavigate
 
   const token =
     localStorage.getItem("accessToken") ||
@@ -77,22 +80,19 @@ const UserDonations = () => {
 
       const requestedQuantity = requestId.quantity;
       console.log(requestedQuantity);
-    
 
-     
-        // Approve partial request
-        const response = await axiosInstance.post(`/request-partial/${donationId}`, {
-          quantity: requestedQuantity,
-        });
-        const { data } = response.data;
+      // Approve partial request
+      const response = await axiosInstance.post(`/request-partial/${donationId}`, {
+        quantity: requestedQuantity,
+      });
+      const { data } = response.data;
 
-        // Update the donation's quantity in the state
-        setDonations((prev) =>
-          prev.map((d) =>
-            d._id === donationId ? { ...d, quantity: data.remainingQuantity } : d
-          )
-        );
-      
+      // Update the donation's quantity in the state
+      setDonations((prev) =>
+        prev.map((d) =>
+          d._id === donationId ? { ...d, quantity: data.remainingQuantity } : d
+        )
+      );
 
       // Update the request status to approved
       await axiosInstance.put(`/requests/${requestId._id}`, { status: "approved" });
@@ -135,6 +135,11 @@ const UserDonations = () => {
     }
   };
 
+  const handleCreateDonation = () => {
+    // Navigate to the /donation page when the button is clicked
+    navigate("/donation");
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -142,6 +147,16 @@ const UserDonations = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-3xl font-bold text-center mb-6">Your Donations</h1>
+
+      {/* Add button to create new donation */}
+      <div className="text-center mb-6">
+        <button
+          onClick={handleCreateDonation}
+          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+        >
+          Create New Donation
+        </button>
+      </div>
 
       {donations.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

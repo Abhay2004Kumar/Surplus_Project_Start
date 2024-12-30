@@ -117,6 +117,7 @@ const UserDonations = () => {
         )
       );
       setNotifications((prev) => prev.filter((notification) => notification._id !== notificationId));
+      window.location.reload()
     } catch (error) {
       console.error("Error approving request or updating donation:", error);
       alert("An error occurred while processing the request.");

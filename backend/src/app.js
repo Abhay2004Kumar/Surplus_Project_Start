@@ -1,4 +1,6 @@
 import express from "express"
+import http from "http"
+import {Server} from "socket.io"
 import cors from "cors"
 import cookieParser from "cookie-parser"  //used for applying CRUD operation on cookies
 import axios from "axios"
@@ -7,6 +9,15 @@ import dotenv from "dotenv"
 dotenv.config();
 
 const app=express()
+const server = http.createServer(app)
+
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000", // Allow requests from the frontend
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+    }
+})
 
 //config cors
 app.use(cors({
@@ -39,6 +50,22 @@ app.get("/api/v1/location", async (req, res) => {
     }
 });
 
+// Socket.IO connection
+io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
+  
+    // Handle events from the client
+    socket.on("sendNotification", (notification) => {
+      console.log("Received notification:", notification);
+  
+      // Broadcast notification to all connected clients
+      io.emit("receiveNotification", notification);
+    });
+  
+    socket.on("disconnect", () => {
+      console.log(`User disconnected: ${socket.id}`);
+    });
+  });
 
 
 export {app}

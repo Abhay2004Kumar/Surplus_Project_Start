@@ -24,7 +24,7 @@ const Bheader = () => {
           {isLoggedIn && (
            <div className="flex space-x-4">
            <button
-             onClick={() => navigate("/donate")}
+             onClick={() => navigate("/user-donations")}
              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md"
            >
              Donate Now

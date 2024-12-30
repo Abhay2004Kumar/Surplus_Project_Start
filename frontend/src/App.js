@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import Food from "./pages/Food"
 import Contact from "./pages/Contact";
 import DeveloperPage from "./pages/DeveloperPage";
+import UserDonations from "./pages/UserDonations";
 
 function App() {
   return (
@@ -76,7 +77,19 @@ function App() {
             <Layout>
               <DeveloperPage/>
             </Layout>
+
           }
+          
+        />
+         <Route
+          path="/user-donations"
+          element={
+            <Layout>
+              <UserDonations/>
+            </Layout>
+
+          }
+          
         />
         
       </Routes>

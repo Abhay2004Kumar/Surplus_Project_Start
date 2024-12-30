@@ -233,38 +233,66 @@ export const createDonation = asyncHandler(async (req, res) => {
         }
     });
 
-    export const requestFullDonation = async (req, res) => {
-      try {
-        const { id } = req.params;
-        const donation = await Donation.findByIdAndUpdate(id, { quantity: 0 }, { new: true });
-        if (!donation) {
-          return res.status(404).json({ error: "Donation not found" });
-        }
-        res.status(200).json({ success: true, data: donation });
-      } catch (error) {
-        res.status(500).json({ error: "Server error" });
+    // export const requestFullDonation = asyncHandler(async (req, res) => {
+    //   const { id } = req.params;
+    
+    //   // Find the donation by ID
+    //   const donation = await Donation.findById(id);
+    
+    //   if (!donation) {
+    //     return res.status(404).json({ error: "Donation not found" });
+    //   }
+    
+    //   // Check if the donation has already been consumed
+    //   if (donation.quantity <= 0) {
+    //     return res.status(400).json({ error: "Donation quantity is already 0, cannot request full donation" });
+    //   }
+    
+    //   // Consume the entire quantity
+    //   const consumedQuantity = donation.quantity;
+    //   donation.quantity = 0; // Set quantity to 0
+    //   await donation.save();
+    
+    //   // Delete the donation if quantity becomes zero
+    //   await Donation.findByIdAndDelete(id);
+    
+    //   return res.status(200).json({
+    //     success: true,
+    //     message: "Donation fully consumed and deleted",
+    //     data: { consumedQuantity },
+    //   });
+    // });
+    
+    
+    // Handle partial donation requests
+    export const requestPartialDonation = asyncHandler(async (req, res) => {
+      const { id } = req.params;
+      const { quantity } = req.body;
+    
+      const donation = await Donation.findById(id);
+    
+      if (!donation || quantity <= 0 || donation.quantity < quantity) {
+        return res.status(400).json({ error: "Invalid request or insufficient quantity" });
       }
-    };
     
-  
-    export const requestPartialDonation = async (req, res) => {
-      try {
-        const { id } = req.params;
-        const { quantity } = req.body;
-        const donation = await Donation.findById(id);
-    
-        if (!donation || donation.quantity < quantity) {
-          return res.status(400).json({ error: "Invalid request" });
-        }
-    
-        donation.quantity -= quantity;
-        await donation.save();
-    
-        res.status(200).json({ success: true, data: donation });
-      } catch (error) {
-        res.status(500).json({ error: "Server error" });
+      // Reduce the donation quantity
+      donation.quantity -= quantity;
+      if (donation.quantity === 0) {
+        await Donation.findByIdAndDelete(id);
+        return res.status(200).json({ success: true, message: "Donation fully consumed and deleted", data: donation });
       }
-    };
+     
+      await donation.save();
+    
+      res.status(200).json({ success: true, message: "Donation quantity updated", data: donation });
+    });
+
+    
+    export const getUserDonations = asyncHandler(async (req,res) => {
+      const userId = req.user._id
+      const donations = await Donation.find({ user: userId }).sort({ createdAt: -1 });
+      res.status(200).json({ data: donations });
+    })
     
       
   

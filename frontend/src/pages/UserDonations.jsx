@@ -14,6 +14,14 @@ const UserDonations = () => {
     localStorage.getItem("accessToken") ||
     document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
 
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    };
+
   // Axios instance with default headers
   const axiosInstance = axios.create({
     baseURL: "http://localhost:5000/api/v1/users",
@@ -169,6 +177,7 @@ const UserDonations = () => {
               />
               <h2 className="text-xl font-bold">{donation.food}</h2>
               <p className="text-gray-700">Quantity: {donation.quantity}</p>
+              <p className="text-gray-700">Expiry: {formatDate(donation.expiryDate)}</p>
 
               <div className="mt-4">
                 {requests

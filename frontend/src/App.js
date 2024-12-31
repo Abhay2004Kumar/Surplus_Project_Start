@@ -10,6 +10,7 @@ import Food from "./pages/Food"
 import Contact from "./pages/Contact";
 import DeveloperPage from "./pages/DeveloperPage";
 import UserDonations from "./pages/UserDonations";
+import AboutPage from "./pages/AboutPage";
 
 function App() {
   return (
@@ -70,9 +71,17 @@ function App() {
             </Layout>
           }
         />
+        <Route
+          path="/aboutus"
+          element={
+            <Layout>
+              <AboutPage/>
+            </Layout>
+          }
+        />
 
           <Route
-          path="/about"
+          path="/dev"
           element={
             <Layout>
               <DeveloperPage/>

@@ -34,7 +34,7 @@ function Header() {
   };
 
   const handleAboutClick = () => {
-    navigate("/about")
+    navigate("/aboutus")
   }
   const handlehomeClick = () => {
     navigate("/")
@@ -51,7 +51,7 @@ function Header() {
 
   return (
     <header className="absolute top-0 left-0 w-full flex justify-between items-center p-6 bg-black bg-opacity-50">
-      <div className="text-2xl font-bold text-white">YourLogo</div>
+      <div className="text-2xl font-bold text-white">Surplus Food.</div>
       <ul className="flex space-x-6 text-white">
       <li 
         onClick={handlehomeClick}

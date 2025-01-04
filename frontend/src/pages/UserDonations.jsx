@@ -199,10 +199,19 @@ const UserDonations = () => {
 
       <h2 className="text-2xl font-bold mt-6 mb-4">Notifications</h2>
       <div className="bg-white p-4 rounded shadow-lg">
-        {notifications.length > 0 ? (
-          notifications.map((notification) => (
-            <div key={notification._id} className="mb-4 p-4 border-b">
-              <p className="text-sm">{notification.message}</p>
+      {notifications.length > 0 ? (
+    notifications.map((notification) => (
+      <div key={notification._id} className="mb-4 p-4 border-b">
+        <p className="text-sm">{notification.message}</p>
+        {notification.requestId?.requesterId && (
+          <div className="mt-2">
+            <p className="text-sm font-bold">Requester Details:</p>
+            <p>Name: {notification.requestId.requesterId.firstName}  {notification.requestId.requesterId.lastName}</p>
+            <p>Location: {notification.requestId.donationId.location}</p>
+            <p>Postal Code: {notification.requestId.donationId.postal}</p>
+            <p>Contact: {notification.requestId.requesterId.contact}</p>
+          </div>
+        )}
               <div className="mt-2 flex justify-between">
                 {notification.requestId && (
                   <button

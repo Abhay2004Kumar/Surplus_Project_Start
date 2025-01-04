@@ -51,15 +51,21 @@ export const getNotifications = asyncHandler(async (req, res) => {
   
     // Fetch notifications for the user, and populate requestId and donationId
     const notifications = await Notification.find({ userId })
-      .populate({
-        path: 'requestId',            // Populating the requestId field
-        select: 'status quantity donationId', // Select the fields needed from the request
-        populate: {
-          path: 'donationId',         // Populate donationId in requestId
-          select: 'food quantity location contact', // Select necessary fields from Donation
-        }
-      })
-      .sort({ createdAt: -1 });  // Sort notifications by creation date (descending)
+    .populate({
+      path: "requestId", // Populating the requestId field
+      select: "status quantity donationId requesterId", // Select the required fields
+      populate: [
+        {
+          path: "donationId", // Populate donationId in requestId
+          select: "food quantity location postal contact", // Select necessary fields from Donation
+        },
+        {
+          path: "requesterId", // Populate requesterId in requestId
+          select: "firstName lastName  contact", // Select name, postal code, and contact
+        },
+      ],
+    })
+    .sort({ createdAt: -1 });   // Sort notifications by creation date (descending)
   
     if (!notifications || notifications.length === 0) {
       return res.status(404).json(new ApiResponse(404, [], "No notifications found."));

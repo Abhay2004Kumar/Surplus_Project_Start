@@ -6,10 +6,12 @@ import {
     getAllDonations, 
     getDonationsByPostalCode, 
     getUserDonations, 
+    getUserProfile, 
     logOutUser, 
     loginUser, 
     registerUser,  
-    requestPartialDonation 
+    requestPartialDonation, 
+    updateUserProfile
   } from "../controllers/user.controller.js"; // Import the new controller methods
   import { verifyJWT } from "../middlewares/auth.middleware.js";
   import { upload } from "../middlewares/multer.middleware.js";
@@ -22,6 +24,8 @@ import { createNotification, deleteNotification, getNotifications, updateNotific
   Userrouter.route("/registerUser").post(registerUser);
   Userrouter.route("/loginUser").post(loginUser);
   Userrouter.route("/logoutUser").post(verifyJWT, logOutUser);
+  Userrouter.route("/profile").get(verifyJWT,getUserProfile)
+  Userrouter.route("/profile").put(verifyJWT,updateUserProfile)
   
   
   // Donation routes

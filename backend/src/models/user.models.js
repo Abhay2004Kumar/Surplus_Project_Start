@@ -48,6 +48,8 @@ userSchema.pre("save", async function(next) {
 
 })
 
+
+
 //custom method
 userSchema.methods.isPasswordCorrect = async function(password) {
     if (!password || !this.password) {

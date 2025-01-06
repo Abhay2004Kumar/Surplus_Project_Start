@@ -33,6 +33,10 @@ function Header() {
     navigate("/contact");
   };
 
+  const handleProfile = () => {
+    navigate("/profile")
+  };
+
   const handleAboutClick = () => {
     navigate("/aboutus")
   }
@@ -63,6 +67,15 @@ function Header() {
         <li 
         onClick={handleContactClick}
         className="hover:text-yellow-400 cursor-pointer">Contact</li>
+        {isLoggedIn && (
+          // Show Logout button only if the user is logged in
+          <button
+            onClick={handleProfile}
+            className="hover:text-yellow-400 cursor-pointer"
+          >
+            Profile
+          </button>
+        )}
 
         {isLoggedIn && (
           // Show Logout button only if the user is logged in

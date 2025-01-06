@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import DeveloperPage from "./pages/DeveloperPage";
 import UserDonations from "./pages/UserDonations";
 import AboutPage from "./pages/AboutPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -85,6 +86,16 @@ function App() {
           element={
             <Layout>
               <DeveloperPage/>
+            </Layout>
+
+          }
+          
+        />
+         <Route
+          path="/profile"
+          element={
+            <Layout>
+              <ProfilePage/>
             </Layout>
 
           }

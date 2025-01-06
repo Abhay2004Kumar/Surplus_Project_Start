@@ -6,6 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose";
 import { Donation } from "../models/donation.models.js";
+import bcrypt from 'bcrypt'
 
 const generateAccessAndRefreshTokens = async(userId) => {
     try {
@@ -82,6 +83,58 @@ const registerUser = asyncHandler( async (req,res) => {
  
  
  })
+
+ export const getUserProfile = asyncHandler(async (req, res) => {
+  const userId = req.user._id; // Assuming `verifyJWT` middleware sets `req.user`
+  
+  const user = await User.findById(userId).select("-password");
+  
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, user, "User profile fetched successfully")
+  );
+});
+
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { firstName, lastName, contact, password } = req.body;
+
+  if ([firstName, lastName, contact].some((field) => field?.trim() === "")) {
+    throw new ApiError(400, "First name, last name, and contact are required");
+  }
+
+  if (!isValidContact(contact)) {
+    throw new ApiError(400, "Invalid contact number. It must be 10 digits long.");
+  }
+
+  // Find and update the user
+  const updateFields = { firstName, lastName, contact };
+  if (password) {
+    
+    updateFields.password = await bcrypt.hash(password, 10);
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(userId, updateFields, {
+    new: true,
+    runValidators: true,
+    select: "-password",
+  });
+
+  if (!updatedUser) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, updatedUser, "User profile updated successfully")
+  );
+});
+
+
+
+
 
  const loginUser = asyncHandler(async (req,res) => {
     // req body -> data

@@ -11,4 +11,7 @@ const donationSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 
+// Create TTL index on expiryDate field
+donationSchema.index({ expiryDate: 1 }, { expireAfterSeconds: 0 });
+
 export const Donation = mongoose.model("Donation", donationSchema);

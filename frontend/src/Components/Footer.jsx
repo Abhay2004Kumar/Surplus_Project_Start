@@ -9,7 +9,7 @@ const Footer = () => {
     navigate("/dev")
   }
   return (
-    <footer className="bg-gray-800 text-gray-400 py-6 text-center">
+    <footer className="bg-gray-800 text-gray-400 py-6 text-center z-[20]">
       <p>© 2025 Food Donation. All rights reserved.</p>
       <div className="mt-4">
         <a onClick={handleClick} className="hover:text-white mx-2 cursor-pointer">Developer Details</a>

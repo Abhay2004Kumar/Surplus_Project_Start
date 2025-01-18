@@ -89,17 +89,19 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+    <div className=" flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-8 ">
+      <div className=" w-full max-w-md p-6 bg-white rounded-lg shadow-md sm:max-w-lg lg:max-w-xl  ">
+        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6 sm:text-3xl lg:text-4xl">
           User Details
         </h2>
         {message && (
-          <p className="text-center text-sm text-green-600 mb-4">{message}</p>
+          <p className="text-center text-sm text-green-600 mb-4 sm:text-base">
+            {message}
+          </p>
         )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 sm:text-base">
               First Name
             </label>
             <input
@@ -112,7 +114,7 @@ const ProfilePage = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 sm:text-base">
               Last Name
             </label>
             <input
@@ -125,7 +127,7 @@ const ProfilePage = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 sm:text-base">
               Contact
             </label>
             <input
@@ -138,7 +140,7 @@ const ProfilePage = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 sm:text-base">
               Email (cannot be changed)
             </label>
             <input
@@ -150,7 +152,7 @@ const ProfilePage = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 sm:text-base">
               New Password
             </label>
             <input
@@ -163,7 +165,7 @@ const ProfilePage = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 sm:text-base">
               Confirm Password
             </label>
             <input
@@ -191,5 +193,6 @@ const ProfilePage = () => {
     </div>
   );
 };
-
-export default ProfilePage;
+  
+  export default ProfilePage;
+  

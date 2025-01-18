@@ -68,7 +68,7 @@ const Donation = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="h-[1300px] bg-gray-100 flex items-center justify-center ">
       <div className="bg-white p-8 rounded shadow-lg max-w-lg w-full">
         <div className="mb-6">
           <img src={foodpic} alt="Donations" className="w-full rounded h-[250px]" />

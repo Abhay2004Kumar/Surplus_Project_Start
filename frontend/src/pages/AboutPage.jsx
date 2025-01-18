@@ -2,7 +2,7 @@ import React from "react";
 
 const AboutPage = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col h-[800px] bg-gray-50 relative top-[50px]">
       {/* Main Content */}
       <main className="flex-grow">
         <div className="max-w-6xl mx-auto px-4 py-12 grid lg:grid-cols-2 gap-8">

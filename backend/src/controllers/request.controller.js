@@ -68,29 +68,58 @@ export const getUserRequests = asyncHandler(async (req, res) => {
 /**
  * Update request status (approve/reject)
  */
+// export const updateRequestStatus = asyncHandler(async (req, res) => {
+//     console.log("Request Params:", req.params);
+//     console.log("Request Body:", req.body);
+  
+//     const { id } = req.params; // Extract the request ID
+//     if (!id) {
+//       throw new ApiError(400, "Request ID is required.");
+//     }
+  
+//     const { status } = req.body; // Extract the status
+//     if (!status) {
+//       throw new ApiError(400, "Status is required.");
+//     }
+  
+//     // Update the request
+//     const request = await Request.findByIdAndUpdate(id, { status }, { new: true });
+//     if (!request) {
+//       throw new ApiError(404, "Request not found.");
+//     }
+  
+//     res.status(200).json(new ApiResponse(200, request, "Request status updated successfully."));
+//   });
+  
 export const updateRequestStatus = asyncHandler(async (req, res) => {
-    console.log("Request Params:", req.params);
-    console.log("Request Body:", req.body);
-  
-    const { id } = req.params; // Extract the request ID
-    if (!id) {
-      throw new ApiError(400, "Request ID is required.");
-    }
-  
-    const { status } = req.body; // Extract the status
-    if (!status) {
-      throw new ApiError(400, "Status is required.");
-    }
-  
-    // Update the request
-    const request = await Request.findByIdAndUpdate(id, { status }, { new: true });
-    if (!request) {
-      throw new ApiError(404, "Request not found.");
-    }
-  
-    res.status(200).json(new ApiResponse(200, request, "Request status updated successfully."));
-  });
-  
+  console.log("Request Params:", req.params);
+  console.log("Request Body:", req.body);
+
+  const { id } = req.params; // Extract the request ID
+  if (!id) {
+    throw new ApiError(400, "Request ID is required.");
+  }
+
+  const { status } = req.body; // Extract the status
+  if (!status) {
+    throw new ApiError(400, "Status is required.");
+  }
+
+  // Update the request status
+  const request = await Request.findByIdAndUpdate(
+    id,
+    { status },
+    { new: true } // Return the updated document
+  );
+
+  if (!request) {
+    throw new ApiError(404, "Request not found.");
+  }
+
+  res.status(200).json(
+    new ApiResponse(200, request, "Request status updated successfully.")
+  );
+});
   
 /**
  * Get requests for a specific donation

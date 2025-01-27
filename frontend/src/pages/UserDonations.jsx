@@ -117,33 +117,51 @@ const UserDonations = () => {
         )
       );
       setNotifications((prev) => prev.filter((notification) => notification._id !== notificationId));
-      window.location.reload()
+      // window.location.reload()
     } catch (error) {
       console.error("Error approving request or updating donation:", error);
       alert("An error occurred while processing the request.");
     }
   };
 
+  // const handleRejectNotification = async (notificationId, requestId) => {
+  //   try {
+  //     // Delete the notification first
+  //     await axiosInstance.delete(`/notifications/${notificationId}`);
+
+  //     // Delete the request from the database
+  //     await axiosInstance.delete(`/requests/${requestId._id}`);
+
+  //     alert("Notification and request rejected successfully!");
+
+  //     // Remove the request from the state
+  //     setRequests((prev) => prev.filter((request) => request._id !== requestId._id));
+
+  //     // Remove the notification from the state
+  //     setNotifications((prev) => prev.filter((notification) => notification._id !== notificationId));
+  //   } catch (error) {
+  //     console.error("Error rejecting notification and deleting request:", error);
+  //   }
+  // };
+
   const handleRejectNotification = async (notificationId, requestId) => {
     try {
-      // Delete the notification first
+      // Update the request status to rejected
+      await axiosInstance.put(`/requests/${requestId._id}`, { status: "rejected" });
+  
+      // Delete the notification
       await axiosInstance.delete(`/notifications/${notificationId}`);
-
-      // Delete the request from the database
-      await axiosInstance.delete(`/requests/${requestId._id}`);
-
+  
       alert("Notification and request rejected successfully!");
-
-      // Remove the request from the state
-      setRequests((prev) => prev.filter((request) => request._id !== requestId._id));
-
-      // Remove the notification from the state
-      setNotifications((prev) => prev.filter((notification) => notification._id !== notificationId));
+  
+      // Reload the page to reflect the updated status
+      window.location.reload();
     } catch (error) {
-      console.error("Error rejecting notification and deleting request:", error);
+      console.error("Error rejecting notification and updating request status:", error);
+      alert("An error occurred while rejecting the request.");
     }
   };
-
+  
   const handleCreateDonation = () => {
     // Navigate to the /donation page when the button is clicked
     navigate("/donation");

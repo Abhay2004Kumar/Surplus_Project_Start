@@ -2,6 +2,7 @@ import { Notification } from "../models/notification.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import sendEmail from "../utils/sendEmail.js";
 
 export const createNotification = asyncHandler(async (req, res) => {
   const { userId, message, requestId } = req.body;  // Add requestId here
@@ -115,3 +116,5 @@ export const deleteNotification = asyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, null, "Notification deleted successfully"));
 });
+
+
